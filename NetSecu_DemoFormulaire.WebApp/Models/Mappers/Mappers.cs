@@ -1,4 +1,5 @@
-﻿using NetSecu_DemoFormulaire.Models.Entities;
+﻿using NetSecu_DemoFormulaire.Models;
+using NetSecu_DemoFormulaire.Models.Entities;
 using NetSecu_DemoFormulaire.WebApp.Models.Forms;
 using System.Data;
 
@@ -26,6 +27,28 @@ namespace NetSecu_DemoFormulaire.WebApp.Models.Mappers
                 Prenom = form.Prenom,
                 Email = form.Email,
                 Passwd = form.Passwd
+            };
+        }
+        internal static UserModel ToUserModel(this Utilisateur entity)
+        {
+            return new UserModel()
+            {
+                Id = entity.Id,
+                Nom = entity.Nom,
+                Prenom = entity.Prenom,
+                Email = entity.Email
+            };
+        }
+
+        internal static Utilisateur ToUtilisateur(this UserModel entity)
+        {
+            return new Utilisateur()
+            {
+                Id = entity.Id,
+                Nom = entity.Nom,
+                Prenom = entity.Prenom,
+                Email = entity.Email,
+                Passwd = "********"
             };
         }
     }

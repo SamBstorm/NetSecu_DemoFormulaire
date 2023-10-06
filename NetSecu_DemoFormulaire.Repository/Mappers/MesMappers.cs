@@ -17,7 +17,8 @@ namespace NetSecu_DemoFormulaire.Repository.Mappers
                 Id = (Guid)record["Id"],
                 Nom = (string)record["Nom"],
                 Prenom = (string)record["Prenom"],
-                Email = (string)record["Email"]
+                Email = (string)record["Email"],
+                Passwd = "********"
             };
         }
 

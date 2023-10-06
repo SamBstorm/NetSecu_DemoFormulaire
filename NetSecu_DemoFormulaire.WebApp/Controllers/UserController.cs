@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NetSecu_DemoFormulaire.Models.Entities;
-using NetSecu_DemoFormulaire.Repository; 
+using NetSecu_DemoFormulaire.Repository;
+using NetSecu_DemoFormulaire.WebApp.Models.Mappers;
 
 namespace NetSecu_DemoFormulaire.WebApp.Controllers
 {
@@ -16,13 +17,13 @@ namespace NetSecu_DemoFormulaire.WebApp.Controllers
         public IActionResult Index()
         {
                       
-            return View(repo.Get().ToList());
+            return View(repo.Get().Select(u => u.ToUserModel()));
         }
 
         public IActionResult Details(Guid id)
         {
              
-            return View(repo.GetById(id));
+            return View(repo.Get(id).ToUserModel());
 
         }
     }

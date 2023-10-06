@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 
 namespace NetSecu_DemoFormulaire.Repository
 {
-    public interface IGameRepository
+    public interface IGameRepository :
+        IGetRepository<Jeux, Guid>,
+        IGetAllRepository<Jeux, Guid>,
+        ICreateRepository<Jeux, Guid>,
+        IUpdateRepository<Jeux, Guid>,
+        IDeleteRepository<Jeux, Guid>
     {
         IEnumerable<Jeux> Get();
         IEnumerable<Jeux> GetByCreateurId(Guid createurId);

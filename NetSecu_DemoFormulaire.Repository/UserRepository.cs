@@ -37,20 +37,17 @@ namespace NetSecu_DemoFormulaire.Repository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<UserModel> Get()
+        public IEnumerable<Utilisateur> Get()
         {
-            IEnumerable<Utilisateur> listFromDb = null;
-            IEnumerable<UserModel> list = null;
             using (DbConnection connection = new SqlConnection())
             {
                 connection.ConnectionString = cnstr;
                 connection.Open();
-                listFromDb=   connection.ExecuteReader("SELECT Id, Nom, Prenom, Email FROM Utilisateur", dr => dr.ToUtilisateur()).ToList();
-            }
-            return listFromDb.Select(u=> new UserModel() { Email = u.Email, Id=u.Id, Nom=u.Nom, Prenom=u.Prenom }); ;
+                return connection.ExecuteReader("SELECT Id, Nom, Prenom, Email FROM Utilisateur", dr => dr.ToUtilisateur());
+            }            
         }
 
-        public UserModel? GetById(Guid id)
+        public Utilisateur? Get(Guid id)
         {
             Utilisateur? utilisateur;
             using (DbConnection connection = new SqlConnection())
@@ -59,24 +56,16 @@ namespace NetSecu_DemoFormulaire.Repository
                 connection.Open();
                  utilisateur = connection.ExecuteReader("SELECT Id, Nom, Prenom, Email FROM Utilisateur WHERE id= @GUID;", dr => dr.ToUtilisateur(), parameters: new {  GUID=id }).SingleOrDefault();
 
-                if (utilisateur is null)
-                {
-                    return default;
-                }
+                return utilisateur;
             }
-            return new UserModel() { 
-                Id = utilisateur.Id,
-                Nom = utilisateur.Nom,
-                Prenom = utilisateur.Prenom,
-                Email = utilisateur.Email
-            };
+            
         }
 
         public Utilisateur? Login(string email, string password)
         {
             using (SqlConnection connection = new SqlConnection())
             {
-                connection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DemoFormulaire;Integrated Security=True;Encrypt=False";
+                connection.ConnectionString = cnstr;
                 connection.Open();
                 Utilisateur? utilisateur = connection.ExecuteReader("SELECT Id, Nom, Prenom, Email FROM Utilisateur WHERE Email = @Email AND Passwd = @Passwd;", dr => dr.ToUtilisateur(), parameters: new { email, Passwd = password.Hash() }).SingleOrDefault();
                 return utilisateur;
