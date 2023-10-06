@@ -22,12 +22,28 @@ namespace NetSecu_DemoFormulaire.Repository
         }
         public void Create(Jeux entity)
         {
-            throw new NotImplementedException();
+            using (DbConnection connection = new SqlConnection())
+            {
+                connection.ConnectionString = cnstr;
+                connection.Open();
+                connection.ExecuteNonQuery("INSERT INTO Jeux (Nom, Editeur, AnneeSortie, DateAjout, CreateurId) VALUES (@nom, @editeur, @annee, @date, @c_id)", parameters: new { 
+                    nom = entity.Nom,
+                    editeur = entity.Editeur,
+                    annee = entity.AnneeSortie,
+                    date = entity.DateAjout,
+                    c_id = entity.CreateurId
+                });
+            }
         }
 
         public void Delete(Guid id)
         {
-            throw new NotImplementedException();
+            using (DbConnection connection = new SqlConnection())
+            {
+                connection.ConnectionString = cnstr;
+                connection.Open();
+                connection.ExecuteNonQuery("DELETE FROM Jeux WHERE Id = @id)", parameters: new { id });
+            }
         }
 
         public IEnumerable<Jeux> Get()
@@ -52,15 +68,39 @@ namespace NetSecu_DemoFormulaire.Repository
 
                 if (jeux is null)
                 {
-                    return default(Jeux);
+                    return default;
                 }
             }
             return new Jeux() { Id = jeux.Id, Nom = jeux.Nom, Editeur = jeux.Editeur, AnneeSortie = jeux.AnneeSortie, DateAjout = jeux.DateAjout };
         }
 
+        public IEnumerable<Jeux> GetByCreateurId(Guid createurId)
+        {
+            IEnumerable<Jeux> listFromDb = null;
+            using (DbConnection connection = new SqlConnection())
+            {
+                connection.ConnectionString = cnstr;
+                connection.Open();
+                return connection.ExecuteReader("SELECT Id, Nom, Editeur, AnneeSortie, DateAjout, CreateurId FROM Jeux WHERE CreateurId = @c_id", dr => dr.ToJeux(), parameters : new { c_id = createurId });
+            }
+        }
+
         public void Update(Jeux entity)
         {
-            throw new NotImplementedException();
+            using (DbConnection connection = new SqlConnection())
+            {
+                connection.ConnectionString = cnstr;
+                connection.Open();
+                connection.ExecuteNonQuery("UPDATE Jeux SET Nom = @nom, Editeur  = @editeur, AnneeSortie = @annee WHERE Id = @id)", parameters: new
+                {
+                    id = entity.Id,
+                    nom = entity.Nom,
+                    editeur = entity.Editeur,
+                    annee = entity.AnneeSortie,
+                });
+            }
         }
+
+
     }
 }

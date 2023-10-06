@@ -10,6 +10,7 @@ namespace NetSecu_DemoFormulaire.Repository
     internal interface IGameRepository
     {
         IEnumerable<Jeux> Get();
+        IEnumerable<Jeux> GetByCreateurId(Guid createurId);
         Jeux Get(Guid id);
         void Create(Jeux entity);
         void Update(Jeux entity);
