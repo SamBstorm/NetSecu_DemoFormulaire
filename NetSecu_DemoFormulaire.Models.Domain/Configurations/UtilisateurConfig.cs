@@ -35,6 +35,9 @@ namespace NetSecu_DemoFormulaire.Models.Domain.Configurations
                 .IsRequired()
                 .HasColumnType("NVARCHAR(384)");
 
+            builder.HasIndex(x => x.Email)
+                .IsUnique();
+
             builder.Property(x => x.Passwd)
                 .IsRequired()
                 .HasColumnType("BINARY(64)")
