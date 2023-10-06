@@ -42,12 +42,18 @@ namespace NetSecu_DemoFormulaire.WebApp.Controllers
             #endregion
 
             #region CODE ADO
-            using (SqlConnection connection = new SqlConnection())
-            {
-                connection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DemoFormulaire;Integrated Security=True;Encrypt=False";
-                connection.Open();
-                connection.ExecuteNonQuery("INSERT INTO Utilisateur (Nom, Prenom, Email, Passwd) VALUES (@Nom, @Prenom, @Email, @Passwd)", parameters: new { form.Nom, form.Prenom, form.Email, Passwd = form.Passwd.Hash() });
-            }
+            //using (SqlConnection connection = new SqlConnection())
+            //{
+            //    connection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DemoFormulaire;Integrated Security=True;Encrypt=False";
+            //    connection.Open();
+            //    connection.ExecuteNonQuery("INSERT INTO Utilisateur (Nom, Prenom, Email, Passwd) VALUES (@Nom, @Prenom, @Email, @Passwd)", parameters: new { form.Nom, form.Prenom, form.Email, Passwd = form.Passwd.Hash() });
+            //}
+            #endregion
+
+            #region Repository
+
+            _repo.Create(form.ToUtilisateur());
+
             #endregion
 
             return RedirectToAction("Index", "Home");
@@ -78,18 +84,29 @@ namespace NetSecu_DemoFormulaire.WebApp.Controllers
             #endregion
 
             #region CODE ADO
-            using (SqlConnection connection = new SqlConnection())
-            {
-                connection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DemoFormulaire;Integrated Security=True;Encrypt=False";
-                connection.Open();
-                Utilisateur? utilisateur = connection.ExecuteReader("SELECT Id, Nom, Prenom, Email FROM Utilisateur WHERE Email = @Email AND Passwd = @Passwd;", dr => dr.ToUtilisateur(), parameters: new { form.Email, Passwd = form.Passwd.Hash() }).SingleOrDefault();
+            //using (SqlConnection connection = new SqlConnection())
+            //{
+            //    connection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DemoFormulaire;Integrated Security=True;Encrypt=False";
+            //    connection.Open();
+            //    Utilisateur? utilisateur = connection.ExecuteReader("SELECT Id, Nom, Prenom, Email FROM Utilisateur WHERE Email = @Email AND Passwd = @Passwd;", dr => dr.ToUtilisateur(), parameters: new { form.Email, Passwd = form.Passwd.Hash() }).SingleOrDefault();
 
-                if (utilisateur is null)
-                {
-                    ModelState.AddModelError("", "Erreur Email / Mot de passe");
-                    return View(form);
-                }
+            //    if (utilisateur is null)
+            //    {
+            //        ModelState.AddModelError("", "Erreur Email / Mot de passe");
+            //        return View(form);
+            //    }
+            //}
+            #endregion
+
+            #region Repository
+
+            Utilisateur? user = _repo.Login(form.Email, form.Passwd);
+            if (user is null)
+            {
+                ModelState.AddModelError("", "Erreur Email / Mot de passe");
+                return View(form);
             }
+
             #endregion
 
             ViewBag.Message = "Félicitation, vous êtes connecté!";

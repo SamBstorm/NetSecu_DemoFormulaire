@@ -8,6 +8,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 using Tools.Database;
 
 namespace NetSecu_DemoFormulaire.Repository
@@ -23,7 +24,12 @@ namespace NetSecu_DemoFormulaire.Repository
 
         public void Create(Utilisateur user)
         {
-            throw new NotImplementedException();
+            using (DbConnection connection = new SqlConnection())
+            {
+                connection.ConnectionString = cnstr;
+                connection.Open();
+                connection.ExecuteNonQuery("INSERT INTO Utilisateur (Nom, Prenom, Email, Passwd) VALUES (@Nom, @Prenom, @Email, @Passwd)", parameters: new { user.Nom, user.Prenom, user.Email, Passwd = user.Passwd.Hash() });
+            }
         }
 
         public void Delete(Guid id)
@@ -44,10 +50,10 @@ namespace NetSecu_DemoFormulaire.Repository
             return listFromDb.Select(u=> new UserModel() { Email = u.Email, Id=u.Id, Nom=u.Nom, Prenom=u.Prenom }); ;
         }
 
-        public UserModel GetById(Guid id)
+        public UserModel? GetById(Guid id)
         {
             Utilisateur? utilisateur;
-            using (SqlConnection connection = new SqlConnection())
+            using (DbConnection connection = new SqlConnection())
             {
                 connection.ConnectionString = cnstr;
                 connection.Open();
@@ -55,10 +61,26 @@ namespace NetSecu_DemoFormulaire.Repository
 
                 if (utilisateur is null)
                 {
-                    return default(UserModel);
+                    return default;
                 }
             }
-            return new UserModel() { Email = utilisateur.Email, Id = utilisateur.Id, Nom = utilisateur.Nom, Prenom = utilisateur.Prenom };
+            return new UserModel() { 
+                Id = utilisateur.Id,
+                Nom = utilisateur.Nom,
+                Prenom = utilisateur.Prenom,
+                Email = utilisateur.Email
+            };
+        }
+
+        public Utilisateur? Login(string email, string password)
+        {
+            using (SqlConnection connection = new SqlConnection())
+            {
+                connection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DemoFormulaire;Integrated Security=True;Encrypt=False";
+                connection.Open();
+                Utilisateur? utilisateur = connection.ExecuteReader("SELECT Id, Nom, Prenom, Email FROM Utilisateur WHERE Email = @Email AND Passwd = @Passwd;", dr => dr.ToUtilisateur(), parameters: new { email, Passwd = password.Hash() }).SingleOrDefault();
+                return utilisateur;
+            }
         }
 
         public void Update(Utilisateur user)
