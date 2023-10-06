@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using NetSecu_DemoFormulaire.Models.Domain;
 using NetSecu_DemoFormulaire.Models.Entities;
 using NetSecu_DemoFormulaire.Repository;
+using NetSecu_DemoFormulaire.WebApp.Handlers;
 using NetSecu_DemoFormulaire.WebApp.Models.Forms;
 using NetSecu_DemoFormulaire.WebApp.Models.Mappers;
 using Tools;
@@ -13,9 +14,11 @@ namespace NetSecu_DemoFormulaire.WebApp.Controllers
     public class AuthController : Controller
     {
         private readonly IUserRepository _repo;
-        public AuthController(IUserRepository repo)
+        private readonly SessionManager _sessionManager;
+        public AuthController(IUserRepository repo, SessionManager sessionManager)
         {
             _repo = repo;
+            _sessionManager = sessionManager;
         }
         public IActionResult Index()
         {
@@ -110,7 +113,8 @@ namespace NetSecu_DemoFormulaire.WebApp.Controllers
             #endregion
 
             ViewBag.Message = "Félicitation, vous êtes connecté!";
-            return View();
+            _sessionManager.CurrentUser = user.ToUserModel();
+            return RedirectToAction("Index","Home");
             
         }
     }
