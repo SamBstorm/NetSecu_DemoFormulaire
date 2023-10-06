@@ -15,8 +15,8 @@ namespace NetSecu_DemoFormulaire.Models.Domain.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     Nom = table.Column<string>(type: "NVARCHAR(75)", nullable: false),
-                    Prenom = table.Column<string>(type: "NVARCHAR(384)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Prenom = table.Column<string>(type: "NVARCHAR(75)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(384)", nullable: true),
                     Passwd = table.Column<byte[]>(type: "BINARY(64)", nullable: false)
                 },
                 constraints: table =>

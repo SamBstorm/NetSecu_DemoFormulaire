@@ -12,5 +12,7 @@ namespace NetSecu_DemoFormulaire.Models.Entities
         public string Prenom { get; set; }          
         public string Email { get; set; } 
         public string Passwd { get; set; }
+
+        public ICollection<Jeux> Jeux { get; set; }
     }
 }

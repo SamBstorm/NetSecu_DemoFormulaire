@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetSecu_DemoFormulaire.Models.Domain;
 
@@ -11,9 +12,10 @@ using NetSecu_DemoFormulaire.Models.Domain;
 namespace NetSecu_DemoFormulaire.Models.Domain.Migrations
 {
     [DbContext(typeof(SampleDbContext))]
-    partial class SampleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231006075210_AddJeux")]
+    partial class AddJeux
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,17 +55,6 @@ namespace NetSecu_DemoFormulaire.Models.Domain.Migrations
                     b.HasIndex("CreateurId");
 
                     b.ToTable("Jeux", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("cb751f6c-9d7c-45d7-9716-82824ef5d5cc"),
-                            AnneeSortie = 1985,
-                            CreateurId = new Guid("9b7d5077-7ffc-46ea-9165-769fccda98f6"),
-                            DateAjout = new DateTime(2023, 10, 6, 11, 52, 11, 363, DateTimeKind.Local).AddTicks(2203),
-                            Editeur = "Nintendo",
-                            Nom = "Super Mario Bros."
-                        });
                 });
 
             modelBuilder.Entity("NetSecu_DemoFormulaire.Models.Entities.Utilisateur", b =>
@@ -74,7 +65,7 @@ namespace NetSecu_DemoFormulaire.Models.Domain.Migrations
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(384)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nom")
                         .IsRequired()
@@ -86,21 +77,11 @@ namespace NetSecu_DemoFormulaire.Models.Domain.Migrations
 
                     b.Property<string>("Prenom")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(75)");
+                        .HasColumnType("NVARCHAR(384)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Utilisateur", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("9b7d5077-7ffc-46ea-9165-769fccda98f6"),
-                            Email = "admin@tftic.be",
-                            Nom = "Admin",
-                            Passwd = new byte[] { 151, 182, 117, 90, 55, 44, 163, 172, 117, 79, 4, 131, 65, 174, 132, 14, 218, 225, 31, 177, 170, 205, 65, 145, 193, 45, 196, 240, 240, 224, 71, 113, 163, 173, 49, 14, 250, 197, 33, 112, 38, 87, 146, 30, 225, 254, 188, 249, 178, 194, 130, 181, 205, 144, 131, 48, 131, 74, 171, 253, 85, 168, 89, 55 },
-                            Prenom = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("NetSecu_DemoFormulaire.Models.Entities.Jeux", b =>

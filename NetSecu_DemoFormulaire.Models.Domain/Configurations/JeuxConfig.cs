@@ -7,15 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tools;
 
 namespace NetSecu_DemoFormulaire.Models.Domain.Configurations
 {
-    internal class UtilisateurConfig : IEntityTypeConfiguration<Utilisateur>
+    public class JeuxConfig : IEntityTypeConfiguration<Jeux>
     {
-        public void Configure(EntityTypeBuilder<Utilisateur> builder)
+        public void Configure(EntityTypeBuilder<Jeux> builder)
         {
-            builder.ToTable(nameof(Utilisateur));
+            builder.ToTable(nameof(Jeux));
 
             builder.HasKey(x => x.Id);
 
@@ -27,18 +26,23 @@ namespace NetSecu_DemoFormulaire.Models.Domain.Configurations
                 .IsRequired()
                 .HasColumnType("NVARCHAR(75)");
 
-            builder.Property(x => x.Prenom)
+            builder.Property(x => x.Editeur)
                 .IsRequired()
                 .HasColumnType("NVARCHAR(75)");
 
-            builder.Property(x => x.Email)
+            builder.Property(x => x.AnneeSortie)
                 .IsRequired()
-                .HasColumnType("NVARCHAR(384)");
+                .HasColumnType("INTEGER");
 
-            builder.Property(x => x.Passwd)
+            builder.Property(x => x.DateAjout)
                 .IsRequired()
-                .HasColumnType("BINARY(64)")
-                .HasConversion(new ValueConverter<string, byte[]>(s => s.Hash(), byteArray => Convert.ToBase64String(byteArray)));
+                .HasColumnType("DATETIME2")
+                .HasDefaultValueSql("GETDATE()");
+
+            builder.HasOne(x => x.Createur)
+                .WithMany(x => x.Jeux)
+                .IsRequired()
+                .HasForeignKey(x => x.CreateurId);
         }
     }
 }

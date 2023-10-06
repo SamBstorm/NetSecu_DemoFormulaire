@@ -14,6 +14,7 @@
     <ProjectReference Include="..\NetSecu_DemoFormulaire.Models.Entities\NetSecu_DemoFormulaire.Models.Entities.csproj" />
     <ProjectReference Include="..\NetSecu_DemoFormulaire.Models\NetSecu_DemoFormulaire.Models.csproj" />
     <ProjectReference Include="..\Tools.Database\Tools.Database.csproj" />
+    <ProjectReference Include="..\Tools\Tools.csproj" />
   </ItemGroup>
 
 </Project>
