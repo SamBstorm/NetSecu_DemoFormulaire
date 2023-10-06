@@ -7,6 +7,7 @@ builder.Services.AddControllersWithViews();
 
 //Si tu as besoin d'un Iuserrepo==> new Userrepo(cnstr)
 builder.Services.AddScoped<IUserRepository, UserRepository>(r => new UserRepository(builder.Configuration.GetConnectionString("dev")));
+builder.Services.AddScoped<IGameRepository, GameRepository>(r => new GameRepository(builder.Configuration.GetConnectionString("dev")));
 
 
 var app = builder.Build();

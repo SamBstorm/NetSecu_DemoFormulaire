@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NetSecu_DemoFormulaire.Repository
 {
-    internal interface IGameRepository
+    public interface IGameRepository
     {
         IEnumerable<Jeux> Get();
         IEnumerable<Jeux> GetByCreateurId(Guid createurId);
